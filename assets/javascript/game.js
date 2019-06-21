@@ -1,10 +1,10 @@
 // Global variables
-var baseAttack = 0; // original attack strength
-var player; // holds the player Object
-var defender; // holds the current defender Object
-var charArray = []; // array that stores the game characters (Objects)
-var playerSelected = false; // flag to mark if we picked a player yet
-var defenderSelected = false; // flag to mark if we picked a defender
+var baseAttack = 0; 
+var player; 
+var defender; 
+var charArray = []; 
+var playerSelected = false; 
+var defenderSelected = false; 
 
 
 // Constructor
@@ -17,12 +17,12 @@ function Character(name, hp, ap, counter, pic) {
 }
 
 
-// Increase the attack strength (this attack strength + original attack strength)
+// Increase attack strength
 Character.prototype.increaseAttack = function () {
     this.attackPower += baseAttack;
 };
 
-// Performs an attack
+// Performs attack
 Character.prototype.attack = function (Obj) {
     Obj.healthPoints -= this.attackPower;
     $("#msg").html("You attacked " +
@@ -30,14 +30,14 @@ Character.prototype.attack = function (Obj) {
     this.increaseAttack();
 };
 
-// Performs a counter attack
+// Performs counter attack
 Character.prototype.counterAttack = function (Obj) {
     Obj.healthPoints -= this.counterAttackPower;
     $("#msg").append("<br>" + this.name + " counter attacked you for " + this.counterAttackPower + " damage points.");
 };
 
 
-// Initialize all the characters
+// Initialize characters
 function initCharacters() {
     var luke = new Character("Luke Skywalker", 100, 10, 5, "./assets/images/luke.jpg");
     var vader = new Character("Darth Vader", 200, 50, 30, "./assets/images/vader.jpg");
@@ -46,12 +46,12 @@ function initCharacters() {
     charArray.push(luke, vader, obi, chew);
 }
 
-// "Save" the original attack value
+// "Save" attack value
 function setBaseAttack(Obj) {
     baseAttack = Obj.attackPower;
 }
 
-// Checks if character is alive
+// Alive check
 function isAlive(Obj) {
     if (Obj.healthPoints > 0) {
         return true;
@@ -59,14 +59,14 @@ function isAlive(Obj) {
     return false;
 }
 
-// Checks if the player has won
+// Win check
 function isWinner() {
     if (charArray.length == 0 && player.healthPoints > 0)
         return true;
     else return false;
 }
 
-// Create the character cards onscreen
+// Create charac cards 
 function characterCards(divID) {
     $(divID).children().remove();
     for (var i = 0; i < charArray.length; i++) {
@@ -85,7 +85,7 @@ function characterCards(divID) {
     }
 }
 
-// Update the characters pictures location on the screen (move them between divs)
+// Update characters pictures location 
 function updatePics(fromDivID, toDivID) {
     $(fromDivID).children().remove();
     for (var i = 0; i < charArray.length; i++) {
@@ -97,14 +97,14 @@ function updatePics(fromDivID, toDivID) {
     }
 }
 
-// plays audio file (.mp3)
+// plays audio that i dont have
 function playAudio() {
     var audio = new Audio("./assets/media/themeSongSmall.mp3");
     audio.play();
 }
 
 
-// Change the view from the first screen to the second screen
+// Change the view from screens
 function changeView() {
     $("#firstScreen").empty();
     $("#secondScreen").show();
@@ -112,31 +112,31 @@ function changeView() {
 
 
 $(document).on("click", "img", function () {
-    // Stores the defender the user has clicked on in the defender variable and removes it from the charArray
+    // Stores user defender and removes it from charArray
     if (playerSelected && !defenderSelected && (this.id != player.name)) {
         for (var j = 0; j < charArray.length; j++) {
             if (charArray[j].name == (this).id) {
-                defender = charArray[j]; // sets defender
+                defender = charArray[j]; 
                 charArray.splice(j, 1);
                 defenderSelected = true;
                 $("#msg").html("Click the button to attack!");
             }
         }
-        $("#defenderDiv").append(this); // appends the selected defender to the div 
+        $("#defenderDiv").append(this); 
         $("#defenderDiv").addClass("animated zoomInRight");
         $("#defenderDiv").append("<br>" + defender.name);
         $("#defenderHealthDiv").append("HP: " + defender.healthPoints);
         $("#defenderHealthDiv").addClass("animated zoomInRight");
     }
-    // Stores the character the user has clicked on in the player variable and removes it from charArray
+    // Stores character user and removes it from charArray
     if (!playerSelected) {
         for (var i = 0; i < charArray.length; i++) {
             if (charArray[i].name == (this).id) {
-                player = charArray[i]; // sets current player
-                playAudio(); // starts theme song
+                player = charArray[i]; 
+                playAudio(); 
                 $("body").css({
                     "background-image": "url('./assets/images/" + this.id[0] + ".jpg')"
-                }); // changes the background picture according to the user selection
+                }); // changes background picture
                 setBaseAttack(player);
                 charArray.splice(i, 1);
                 playerSelected = true;
@@ -145,7 +145,7 @@ $(document).on("click", "img", function () {
             }
         }
         updatePics("#game", "#defendersLeftDiv");
-        $("#playerDiv").append(this); // appends the selected player to the div
+        $("#playerDiv").append(this); 
         $("#playerDiv").addClass("animated zoomIn");
         $("#playerDiv").append(player.name);
         $("#playerHealthDiv").append("HP: " + player.healthPoints);
@@ -154,7 +154,7 @@ $(document).on("click", "img", function () {
 
 });
 
-// The attack button functionality
+// attack button 
 $(document).on("click", "#attackBtn", function () {
     if (playerSelected && defenderSelected) {
         if (isAlive(player) && isAlive(defender)) {
@@ -171,7 +171,7 @@ $(document).on("click", "#attackBtn", function () {
                 $("#playerHealthDiv").html("YOU LOST!");
                 $("#msg").html("Try again...");
                 $("#attackBtn").html("Restart Game");
-                $(document).on("click", "#attackBtn", function () { // restarts game
+                $(document).on("click", "#attackBtn", function () { 
                     location.reload();
                 });
             }
@@ -191,7 +191,7 @@ $(document).on("click", "#attackBtn", function () {
     }
 });
 
-// EXECUTE
+// exe
 $(document).ready(function () {
     $("#secondScreen").hide();
     $("#globalMsg").hide();
